@@ -18,9 +18,13 @@ The goal of this project was to implement production-grade K8s patterns: storage
 # 📁Repository Layout
 manifests/
 ├── 01-config.yaml       # ConfigMaps & Secrets (Redis credentials)
+
 ├── 02-pvc.yaml          # PersistentVolumeClaim (1Gi RWO)
+
 ├── 03-redis.yaml        # Redis Deployment & ClusterIP Service
+
 ├── 04-production.yaml   # Frontend Deployment (Limits, Probes) & HPA
+
 └── 05-ingress.yaml      # NGINX Ingress routing for myapp.local
 
 # 🚀How to Run Locally
