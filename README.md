@@ -16,8 +16,6 @@ The goal of this project was to implement production-grade K8s patterns: storage
     Monitoring: Prometheus Operator & Grafana deployed via Helm (kube-prometheus-stack).
 
 📁 Repository Layout
-Plaintext
-
 manifests/
 ├── 01-config.yaml       # ConfigMaps & Secrets (Redis credentials)
 ├── 02-pvc.yaml          # PersistentVolumeClaim (1Gi RWO)
@@ -26,17 +24,15 @@ manifests/
 └── 05-ingress.yaml      # NGINX Ingress routing for myapp.local
 
 🚀 How to Run Locally
-1. Prerequisites
+1. Prerequisites:
 
 Ensure you have minikube, kubectl, and helm installed.
-Bash
 
 minikube start --driver=docker
 minikube addons enable ingress
 minikube addons enable metrics-server
 
-2. Deploy Manifests
-Bash
+2. Deploy Manifests:
 
 kubectl apply -f manifests/01-config.yaml
 kubectl apply -f manifests/02-pvc.yaml
@@ -47,34 +43,32 @@ kubectl apply -f manifests/05-ingress.yaml
 3. Setup Ingress Domain
 
 Add Minikube's IP to your /etc/hosts:
-Bash
 
 echo "$(minikube ip) myapp.local" | sudo tee -a /etc/hosts
 
 Access the application at [http://myapp.local](http://myapp.local).
+
+
 📊 Monitoring Setup (Prometheus & Grafana)
 
 I installed the Prometheus stack using Helm to monitor cluster resources in real time:
-Bash
 
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
 helm repo update
 helm install monitoring prometheus-community/kube-prometheus-stack -n monitoring --create-namespace
 
 To access Grafana:
-Bash
 
 kubectl port-forward -n monitoring svc/monitoring-grafana 3000:80
 
-    User: admin
+User: admin
 
-    Password: Get via kubectl get secret -n monitoring monitoring-grafana -o jsonpath="{.data.admin-password}" | base64 -d
+Password: Get via kubectl get secret -n monitoring monitoring-grafana -o jsonpath="{.data.admin-password}" | base64 -d
 
 🧪 Validation & Tests
 Data Persistence Test
 
 Verified that data stored in Redis survives pod deletions:
-Bash
 
 # 1. Set key in Redis
 kubectl exec -it deployment/redis-backend -- redis-cli -a MySuperSecretPassword123 SET user:1 "Aymane"
@@ -86,6 +80,7 @@ kubectl delete pod -l app=redis
 # 3. Read key from new pod
 kubectl exec -it deployment/redis-backend -- redis-cli -a MySuperSecretPassword123 GET user:1
 # Result: "Aymane"
+
 
 👨‍💻 Author
 
