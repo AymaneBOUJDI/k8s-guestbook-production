@@ -1,4 +1,4 @@
-Kubernetes Microservices Deployment & Observability Stack
+# Kubernetes Microservices Deployment & Observability Stack
 
 This repository contains my local Kubernetes deployment for a Guestbook-style microservice architecture (NGINX Frontend + Redis Stateful Backend) built on Minikube.
 
@@ -17,6 +17,7 @@ The goal of this project was to implement production-grade K8s patterns: storage
 
 # 📁Repository Layout
 manifests/
+
 ├── 01-config.yaml       # ConfigMaps & Secrets (Redis credentials)
 
 ├── 02-pvc.yaml          # PersistentVolumeClaim (1Gi RWO)
@@ -30,7 +31,7 @@ manifests/
 # 🚀How to Run Locally
 ## 1. Prerequisites:
 
-Ensure you have minikube, kubectl, and helm installed.
+### Ensure you have minikube, kubectl, and helm installed.
 
 minikube start --driver=docker
 minikube addons enable ingress
@@ -46,16 +47,16 @@ kubectl apply -f manifests/05-ingress.yaml
 
 ## 3. Setup Ingress Domain
 
-Add Minikube's IP to your /etc/hosts:
+### Add Minikube's IP to your /etc/hosts:
 
 echo "$(minikube ip) myapp.local" | sudo tee -a /etc/hosts
 
-Access the application at [http://myapp.local](http://myapp.local).
+### Access the application at [http://myapp.local](http://myapp.local).
 
 
 # 📊 Monitoring Setup (Prometheus & Grafana)
 
-I installed the Prometheus stack using Helm to monitor cluster resources in real time:
+## I installed the Prometheus stack using Helm to monitor cluster resources in real time:
 
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
 helm repo update
@@ -65,9 +66,9 @@ helm install monitoring prometheus-community/kube-prometheus-stack -n monitoring
 
 kubectl port-forward -n monitoring svc/monitoring-grafana 3000:80
 
-User: admin
+### User: admin
 
-Password: Get via kubectl get secret -n monitoring monitoring-grafana -o jsonpath="{.data.admin-password}" | base64 -d
+### Password: Get via kubectl get secret -n monitoring monitoring-grafana -o jsonpath="{.data.admin-password}" | base64 -d
 
 # 🧪 Validation & Tests
 Data Persistence Test
@@ -75,19 +76,23 @@ Data Persistence Test
 Verified that data stored in Redis survives pod deletions:
 
 ## 1. Set key in Redis
+
 kubectl exec -it deployment/redis-backend -- redis-cli -a MySuperSecretPassword123 SET user:1 "Aymane"
 kubectl exec -it deployment/redis-backend -- redis-cli -a MySuperSecretPassword123 SAVE
 
 ## 2. Kill the Redis pod
+
 kubectl delete pod -l app=redis
 
 ## 3. Read key from new pod
+
 kubectl exec -it deployment/redis-backend -- redis-cli -a MySuperSecretPassword123 GET user:1
+
 ## Result: "Aymane"
 
 
-👨‍💻 Author
+## 👨‍💻 Author
 
 Aymane BOUJDI
 
-DevOps / Cloud Native Enthusiast
+# DevOps / Cloud Native Enthusiast
