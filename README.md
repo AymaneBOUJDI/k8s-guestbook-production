@@ -70,16 +70,16 @@ Data Persistence Test
 
 Verified that data stored in Redis survives pod deletions:
 
-# 1. Set key in Redis
+## 1. Set key in Redis
 kubectl exec -it deployment/redis-backend -- redis-cli -a MySuperSecretPassword123 SET user:1 "Aymane"
 kubectl exec -it deployment/redis-backend -- redis-cli -a MySuperSecretPassword123 SAVE
 
-# 2. Kill the Redis pod
+## 2. Kill the Redis pod
 kubectl delete pod -l app=redis
 
-# 3. Read key from new pod
+## 3. Read key from new pod
 kubectl exec -it deployment/redis-backend -- redis-cli -a MySuperSecretPassword123 GET user:1
-# Result: "Aymane"
+## Result: "Aymane"
 
 
 👨‍💻 Author
