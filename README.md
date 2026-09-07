@@ -15,7 +15,7 @@ The goal of this project was to implement production-grade K8s patterns: storage
 
     Monitoring: Prometheus Operator & Grafana deployed via Helm (kube-prometheus-stack).
 
-#📁 Repository Layout
+# 📁Repository Layout
 manifests/
 ├── 01-config.yaml       # ConfigMaps & Secrets (Redis credentials)
 ├── 02-pvc.yaml          # PersistentVolumeClaim (1Gi RWO)
@@ -23,8 +23,8 @@ manifests/
 ├── 04-production.yaml   # Frontend Deployment (Limits, Probes) & HPA
 └── 05-ingress.yaml      # NGINX Ingress routing for myapp.local
 
-#🚀 How to Run Locally
-##1. Prerequisites:
+# 🚀How to Run Locally
+## 1. Prerequisites:
 
 Ensure you have minikube, kubectl, and helm installed.
 
@@ -32,7 +32,7 @@ minikube start --driver=docker
 minikube addons enable ingress
 minikube addons enable metrics-server
 
-##2. Deploy Manifests:
+## 2. Deploy Manifests:
 
 kubectl apply -f manifests/01-config.yaml
 kubectl apply -f manifests/02-pvc.yaml
@@ -40,7 +40,7 @@ kubectl apply -f manifests/03-redis.yaml
 kubectl apply -f manifests/04-production.yaml
 kubectl apply -f manifests/05-ingress.yaml
 
-##3. Setup Ingress Domain
+## 3. Setup Ingress Domain
 
 Add Minikube's IP to your /etc/hosts:
 
@@ -49,7 +49,7 @@ echo "$(minikube ip) myapp.local" | sudo tee -a /etc/hosts
 Access the application at [http://myapp.local](http://myapp.local).
 
 
-#📊 Monitoring Setup (Prometheus & Grafana)
+# 📊 Monitoring Setup (Prometheus & Grafana)
 
 I installed the Prometheus stack using Helm to monitor cluster resources in real time:
 
@@ -57,7 +57,7 @@ helm repo add prometheus-community https://prometheus-community.github.io/helm-c
 helm repo update
 helm install monitoring prometheus-community/kube-prometheus-stack -n monitoring --create-namespace
 
-##To access Grafana:
+## To access Grafana:
 
 kubectl port-forward -n monitoring svc/monitoring-grafana 3000:80
 
@@ -65,7 +65,7 @@ User: admin
 
 Password: Get via kubectl get secret -n monitoring monitoring-grafana -o jsonpath="{.data.admin-password}" | base64 -d
 
-#🧪 Validation & Tests
+# 🧪 Validation & Tests
 Data Persistence Test
 
 Verified that data stored in Redis survives pod deletions:
